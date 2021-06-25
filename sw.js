@@ -1,7 +1,9 @@
 
+// imports
+importScripts('js/sw-utils.js');
 
 // 1- Ponemos los tres tipos de cache y los APP_SELL
-const STATIC_CACHE    = 'static-v1';
+const STATIC_CACHE    = 'static-2';
 const DYNAMIC_CACHE   = 'dynamic-v1';
 const INMUTABLE_CACHE = 'inmutable-v1';
 
@@ -15,7 +17,8 @@ const APP_SHELL = [
     'img/avatars/spiderman.jpg',
     'img/avatars/thor.jpg',
     'img/avatars/wolverine.jpg',
-    'js/app.js'
+    'js/app.js',
+    'js/sw-utils.js'
 ];
 
 const APP_SHELL_INMUTABLE = [
@@ -65,5 +68,34 @@ self.addEventListener('activate', e => {
     });
 
     e.waitUntil( respuesta );
+
+});
+
+// 2- Cache con Network Fallback
+self.addEventListener( 'fetch', e => {
+
+
+    const respuesta = caches.match( e.request ).then( res => {
+
+        if ( res ) {	// Si la encuentra en cache la devuelve y termina
+
+            return res;	
+
+        } else {	// Si entra aquí es que hay peticiones que no tenemos almacenadas, 
+                    // algunas sales p.e. de los links de fonts, y pasan a este else
+
+            return fetch( e.request ).then( newRes => {
+
+            	// si la respuesta es ok, actualiza el cache dinamico y la devuelve
+            	// si no es ok, la devuelve sin más
+                return actualizaCacheDinamico( DYNAMIC_CACHE, e.request, newRes );
+
+            });
+
+        }
+
+    });
+
+    e.respondWith( respuesta );
 
 });
