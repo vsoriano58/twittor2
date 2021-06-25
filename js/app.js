@@ -1,8 +1,15 @@
 
+// para que funcione (la ruta) el registro del SW
+var url = window.location.href
+var swLocation = '/twittor2/sw.js'
 
 // 1- Empezamos aquí con el registro
 if(navigator.serviceWorker){
-    navigator.serviceWorker.register('/sw.js')
+
+    if(url.includes('localhost')){
+        swLocation = '/sw.js'
+    }
+    navigator.serviceWorker.register(swLocation)
 }
 
 
