@@ -3,7 +3,7 @@
 importScripts('js/sw-utils.js');
 
 // 1- Ponemos los tres tipos de cache y los APP_SELL
-const STATIC_CACHE    = 'static-3';
+const STATIC_CACHE    = 'static-v3';
 const DYNAMIC_CACHE   = 'dynamic-v1';
 const INMUTABLE_CACHE = 'inmutable-v1';
 
